@@ -22,4 +22,5 @@ async def generate_response(query: str):
 
 @router.get("/query")
 async def ask_question(question: str):
+    # TODO: Store the queries and response in Persistent Storage (SQL/No SQL)
     return StreamingResponse(generate_response(question), media_type='text/event-stream')

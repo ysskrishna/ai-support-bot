@@ -1,6 +1,7 @@
 import os
-
 import chromadb
+from dotenv import load_dotenv
+load_dotenv()
 from langchain.chains import RetrievalQA
 from langchain.vectorstores import Chroma
 from langchain.chat_models import ChatOpenAI
@@ -24,6 +25,7 @@ collection_name = "knowledgebase_collection"
 
 # Initialize the vector store
 vector_store = Chroma(client=chroma_client, collection_name=collection_name, embedding_function=embeddings)
+
 
 # Preprocess the knowlegebase documents
 csv_file_path = os.path.abspath(os.path.join("dataset_knowledgebase.csv"))
