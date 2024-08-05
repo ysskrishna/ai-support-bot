@@ -1,83 +1,72 @@
-import React, { useState, useRef, useEffect } from 'react';
-import axios from 'axios';
-
-
-
-
+import React, { useState, useEffect } from 'react';
 
 const Dashboard = () => {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
-    const [response, setResponse] = useState(null);
-    const [eventSource, setEventSource] = useState(null);
+    const [answer, setAnswer] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    let source;
 
-
-    const messageEndRef = useRef(null);
-
-    useEffect(() => {
-      messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }, [messages]);
-
-    // Cleanup on component unmount
-    useEffect(() => {
-      return () => {
-        if (eventSource) {
-          eventSource.close();
-        }
-      };
-    }, [eventSource]);
   
     const handleInputChange = (e) => {
       setInput(e.target.value);
     };
   
-    const handleSend = () => {
+    const handleSend = async () => {
       if (input.trim() !== '') {
         setMessages((prevMessages) => [
           ...prevMessages,
           { text: input, isUser: true },
         ]);
+        setInput('');
+        setAnswer('');
+        setIsLoading(true);
+        source = new EventSource(`http://localhost:8081/chat/query?question=${encodeURIComponent(input)}`);
+        let accumulatedResponse = ''
 
-        // Clean up any existing EventSource connection
-        if (eventSource) {
-          eventSource.close();
-        }
-
-        let source = new EventSource(`http://localhost:8081/chat/query?question=${encodeURIComponent(input)}`);
-        
-        setResponse({
-          isUser: false,
-          text:""
-        })
         source.onmessage = (event) => {
-          console.log("source event - ", event);
-          setResponse(prevResponse => ({
-            ...prevResponse,
-            text: prevResponse.text + event.data + '\n',
-          }));
+          const { data } = event;
+
+          if (data.startsWith('[END]')) {
+            source.close();
+            setIsLoading(false);
+            setMessages((prevMessages) => [
+                ...prevMessages,
+                { text: accumulatedResponse?.trim(), isUser: false },
+            ]);
+            setAnswer('');
+          } else if (data.startsWith('[ERROR]')) {
+            setAnswer(data);
+            source.close();
+            setIsLoading(false);
+          } else {
+            setAnswer((prev) => `${prev} ${data}`);
+            accumulatedResponse += ` ${data}`;
+          }
         };
 
         source.onerror = (error) => {
-          console.error('EventSource failed:', error);
+          console.log('EventSource failed:', error);
           source.close();
+          setIsLoading(false);
+          setMessages((prevMessages) => [
+              ...prevMessages,
+              { text: '[ERROR] An error occurred. Please try again.', isUser: false },
+          ]);
         };
-
-        setEventSource(source);
-        setMessages((prevMessages) => [
-          ...prevMessages,
-          response,
-        ]);
-        setResponse(null);
       }
     };
-  
-    const handleKeyPress = (e) => {
-        if (e.key === 'Enter') {
-          handleSend();
+
+    useEffect(() => {
+      return () => {
+        if (source) {
+          source.close();
         }
-    };
-    console.log("response", response);
-    console.log("messages", messages);
+      };
+    }, []);
+  
+    // console.log("answer", answer);
+    // console.log("messages", messages);
     return (
          <div className="flex md:flex-row flex-col md:h-screen relative items-center justify-center w-full h-screen self-center max-md:self-center max-md:w-[90%] max-sm:w-[90%]">
                 <div className="md:w-[75%] w-full flex flex-col p-4">
@@ -86,39 +75,31 @@ const Dashboard = () => {
                             <div
                                 key={index}
                                 className={`flex ${
-                                message.isUser ? 'justify-end' : 'justify-start'
+                                message?.isUser ? 'justify-end' : 'justify-start'
                                 } mb-4`}
                             >
                                <div
                                 className={`max-w-xs px-4 py-2 rounded-lg ${
-                                    message.isUser
+                                    message?.isUser
                                     ? 'bg-blue-500 text-white rounded-br-none'
                                     : 'bg-gray-300 text-gray-900 rounded-bl-none'
                                 }`}
                                 >
-                                {message.text}
+                                {message?.text}
                                 </div>
                             </div>
                         ))}
-                        {!!response && !!response?.text && (
+                        {!!answer && answer.length > 0 && (
                           <div
-                              key={index}
-                              className={`flex ${
-                              response?.isUser ? 'justify-end' : 'justify-start'
-                              } mb-4`}
+                              className={`flex justify-start mb-4`}
                           >
                             <div
-                              className={`max-w-xs px-4 py-2 rounded-lg ${
-                                  response?.isUser
-                                  ? 'bg-blue-500 text-white rounded-br-none'
-                                  : 'bg-gray-300 text-gray-900 rounded-bl-none'
-                              }`}
+                              className={`max-w-xs px-4 py-2 rounded-lg bg-gray-300 text-gray-900 rounded-bl-none`}
                               >
-                              {response?.text}
+                              {answer}
                               </div>
                           </div>
                         )}
-                        <div ref={messageEndRef} />
                     </div>
 
                     <div className="flex items-center md:w-[70%] w-[90%]  justify-center fixed bottom-0 mb-6">
@@ -126,11 +107,11 @@ const Dashboard = () => {
                             type="text"
                             value={input}
                             onChange={handleInputChange}
-                            onKeyPress={handleKeyPress}
                             placeholder="Type your message..."
                             className="border border-gray-300 rounded py-2 px-4 w-full"
                         />
                         <button
+                            disabled={isLoading}
                             onClick={handleSend}
                             className="bg-[#ececec] hover:bg-gray-200 font-bold py-2 px-4 ml-2 rounded"
                         >
