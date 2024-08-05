@@ -24,6 +24,10 @@ This diagram illustrates the high level components involved and thier interactio
 </video>
 
 
+https://github.com/user-attachments/assets/9e6bc056-5c9f-4e1b-a9ba-e6a180bbe53d
+
+
+
 ## Project Configuration
 Before running the project, make sure to adjust the following configuration files:
 
