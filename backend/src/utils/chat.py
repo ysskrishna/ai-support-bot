@@ -32,7 +32,7 @@ def preprocess_documents(csv_file_path, chroma_client, collection_name, embeddin
         # Process documents in batches
         batch_size = 100  # Define your batch size
         batch_counter = 0
-        total_batches = math.ceil(docs / batch_size)
+        total_batches = math.ceil(len(docs) / batch_size)
         for batch in batchify(docs, batch_size):
             Chroma.from_documents(batch, embeddings, client=chroma_client, collection_name=collection_name)
 

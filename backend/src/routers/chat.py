@@ -1,5 +1,3 @@
-
-
 import asyncio
 
 from fastapi import APIRouter
@@ -12,7 +10,7 @@ router = APIRouter()
 async def generate_response(query: str):
     try:
         result = qa({"query": query})
-        # print(result)
+        print(result)
         answer = result['result']
         for word in answer.split():
             yield f"data: {word}\n\n"

@@ -1,4 +1,3 @@
-
 import os
 
 import chromadb
@@ -17,7 +16,10 @@ local_llm = ChatOpenAI(model_name=model_id)
 
 
 # Initialize Chroma client
-chroma_client = chromadb.HttpClient(host="localhost", port=8000)
+chroma_client = chromadb.HttpClient(
+    host=os.getenv('KNOWLEDGEBASE_HOST', 'localhost'), 
+    port=int(os.getenv('KNOWLEDGEBASE_PORT', 8000))
+)
 collection_name = "knowledgebase_collection"
 
 # Initialize the vector store
