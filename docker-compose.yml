@@ -9,6 +9,12 @@ services:
       - "8081:8081"
     depends_on:
       - vectordb
+  
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "5173:5173"
 
   vectordb:
     image: ghcr.io/chroma-core/chroma:latest

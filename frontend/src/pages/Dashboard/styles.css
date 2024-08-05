@@ -1,0 +1,18 @@
+.user {
+  display: flex;
+  justify-content: flex-end;
+}
+.user > p {
+  background: #ececec;
+  padding: 0.5rem;
+  border-radius: 5px;
+  max-width: 70%;
+  overflow-wrap: break-word;
+}
+.system > p {
+  background: #ececec;
+  padding: 0.5rem;
+  border-radius: 5px;
+  max-width: 70%;
+  overflow-wrap: break-word;
+}

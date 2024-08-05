@@ -11,7 +11,6 @@ from langchain.chat_models import ChatOpenAI
 from sse_starlette.sse import EventSourceResponse
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain.embeddings import SentenceTransformerEmbeddings
-from src.common import schemas
 
 router = APIRouter()
 
@@ -81,7 +80,7 @@ qa = RetrievalQA.from_chain_type(
 async def generate_response(query: str):
     try:
         result = qa({"query": query})
-        print(result)
+        # print(result)
         answer = result['result']
         for word in answer.split():
             yield f"data: {word}\n\n"
@@ -91,6 +90,6 @@ async def generate_response(query: str):
         yield f"data: [ERROR] {str(e)}\n\n"
 
 
-@router.post("/query")
-async def ask_question(request: schemas.ChatQuestionSchema):
-    return EventSourceResponse(generate_response(request.question))
+@router.get("/query")
+async def ask_question(question: str):
+    return EventSourceResponse(generate_response(question))
