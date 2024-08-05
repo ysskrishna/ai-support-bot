@@ -5,7 +5,10 @@ from fastapi.responses import HTMLResponse
 from dotenv import load_dotenv
 load_dotenv()
 from src.routers.chat import router as chat_router
+from src.core.config import initial_setup
 
+
+initial_setup()
 
 app = FastAPI()
 origins = ["*"]

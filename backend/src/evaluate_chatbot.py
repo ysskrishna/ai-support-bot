@@ -12,12 +12,14 @@ def evaluate_chatbot(chatbot):
 
     # TODO: Need to customize it based on given Knowledgebase
     test_data = [
-        {"input": "What is the capital of France?", "expected_output": "Paris"},
-        {"input": "Who wrote 'To Kill a Mockingbird'?", "expected_output": "Harper Lee"},
+        {"input": "What is the capital of France? Give me only answer", "expected_output": "Paris"},
+        {"input": "Who wrote 'To Kill a Mockingbird'? Give me only answer", "expected_output": "Harper Lee"},
     ]
 
     y_true = [item['expected_output'] for item in test_data]
-    y_pred = [chatbot(item['input']) for item in test_data]
+    y_pred = [chatbot(item['input'])['result'] for item in test_data]
+    print(y_true)
+    print(y_pred)
     
     accuracy = accuracy_score(y_true, y_pred)
     precision = precision_score(y_true, y_pred, average='macro')
@@ -31,4 +33,6 @@ def evaluate_chatbot(chatbot):
         "f1_score": f1
     }
 
-evaluate_chatbot(qa)
+metrics = evaluate_chatbot(qa)
+print("Result of chatbot evaluation")
+print(metrics)

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import config from '../../config';
 
 const Dashboard = () => {
     const [messages, setMessages] = useState([]);
@@ -21,7 +22,7 @@ const Dashboard = () => {
         setInput('');
         setAnswer('');
         setIsLoading(true);
-        source = new EventSource(`http://localhost:8081/chat/query?question=${encodeURIComponent(input)}`);
+        source = new EventSource(`${config?.baseUrl}/chat/query?question=${encodeURIComponent(input)}`);
         let accumulatedResponse = ''
 
         source.onmessage = (event) => {

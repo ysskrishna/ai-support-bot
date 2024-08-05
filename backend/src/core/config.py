@@ -27,14 +27,15 @@ collection_name = "knowledgebase_collection"
 vector_store = Chroma(client=chroma_client, collection_name=collection_name, embedding_function=embeddings)
 
 
-# Preprocess the knowlegebase documents
-csv_file_path = os.path.abspath(os.path.join("dataset_knowledgebase.csv"))
-preprocess_documents(
-    csv_file_path=csv_file_path, 
-    chroma_client=chroma_client, 
-    collection_name=collection_name, 
-    embeddings=embeddings
-)
+def initial_setup():
+    # Preprocess the knowlegebase documents
+    csv_file_path = os.path.abspath(os.path.join("dataset_knowledgebase.csv"))
+    preprocess_documents(
+        csv_file_path=csv_file_path, 
+        chroma_client=chroma_client, 
+        collection_name=collection_name, 
+        embeddings=embeddings
+    )
 
 
 # Set up the QA chain
