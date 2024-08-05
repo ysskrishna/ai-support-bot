@@ -4,7 +4,7 @@ import asyncio
 
 from fastapi import APIRouter
 from fastapi.responses import StreamingResponse
-from src.start import qa
+from src.core.config import qa
 
 router = APIRouter()
 
