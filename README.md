@@ -63,3 +63,8 @@ http://localhost:8000/
 
 ## Pending Improvements
 - Add SQL/NoSQL DB to store the user queries and generated reponses
+
+
+http://localhost:8000/api/v1/collections
+
+https://github.com/pixegami/langchain-rag-tutorial

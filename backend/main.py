@@ -5,10 +5,12 @@ from fastapi.responses import HTMLResponse
 from dotenv import load_dotenv
 load_dotenv()
 from src.routers.chat import router as chat_router
-from src.core.config import initial_setup
+from src.utils.create_db import generate_data_store
+from src.core.config import RELOAD_DATA_STORE
 
-
-initial_setup()
+if RELOAD_DATA_STORE:
+    print("Reloading data into vectorstore")
+    generate_data_store()
 
 app = FastAPI()
 origins = ["*"]
