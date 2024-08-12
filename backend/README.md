@@ -17,3 +17,8 @@ python main.py
 ```
 pip freeze > requirements.txt
 ```
+
+## How to run evaluate LLM
+```
+python evaluate_llm.py
+```

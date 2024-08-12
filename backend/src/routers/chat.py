@@ -2,13 +2,14 @@ import asyncio
 
 from fastapi import APIRouter
 from fastapi.responses import StreamingResponse
-from src.core.config import qa
+from src.core.config import get_qa_chain
 
 router = APIRouter()
 
 
 async def generate_response(query: str):
     try:
+        qa = get_qa_chain()
         result = qa({"query": query})
         print(result)
         answer = result['result']

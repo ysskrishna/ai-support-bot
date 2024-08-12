@@ -7,26 +7,9 @@ services:
       context: ./backend
     ports:
       - "8081:8081"
-    depends_on:
-      - vectordb
-  
+
   frontend:
     build:
       context: ./frontend
     ports:
       - "5173:5173"
-
-  vectordb:
-    image: ghcr.io/chroma-core/chroma:latest
-    environment:
-      - IS_PERSISTENT=TRUE
-    volumes:
-      # Default configuration for persist_directory in chromadb/config.py
-      # Currently it's located in "/chroma/chroma/"
-      - chroma-data:/chroma/chroma/
-    ports:
-      - 8000:8000
-
-volumes:
-  chroma-data:
-    driver: local

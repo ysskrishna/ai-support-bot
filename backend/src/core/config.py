@@ -2,46 +2,33 @@ import os
 import chromadb
 from dotenv import load_dotenv
 load_dotenv()
+from langchain_openai import OpenAIEmbeddings
 from langchain.chains import RetrievalQA
 from langchain.vectorstores import Chroma
 from langchain.chat_models import ChatOpenAI
-from langchain.embeddings import SentenceTransformerEmbeddings
-from src.utils.chat import preprocess_documents
 
 # Initialize embeddings
-embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
+embeddings = OpenAIEmbeddings()
+
+
+OPENAI_API_KEY = os.environ['OPENAI_API_KEY']
+CHROMA_PATH = os.environ['CHROMA_PATH']
+MAX_BATCH_SIZE = int(os.environ['MAX_BATCH_SIZE'])
+RELOAD_DATA_STORE = os.getenv(os.environ['RELOAD_DATA_STORE']) and os.getenv(os.environ['RELOAD_DATA_STORE']).lower() == "true"
 
 # Initialize the LLM
-model_id="gpt-3.5-turbo"
+model_id=os.environ['MODEL_ID']
 local_llm = ChatOpenAI(model_name=model_id)
 
 
-# Initialize Chroma client
-chroma_client = chromadb.HttpClient(
-    host=os.getenv('KNOWLEDGEBASE_HOST', 'localhost'), 
-    port=int(os.getenv('KNOWLEDGEBASE_PORT', 8000))
-)
-collection_name = "knowledgebase_collection"
+def get_qa_chain():
+    vector_store = Chroma(persist_directory=CHROMA_PATH, embedding_function=embeddings)
 
-# Initialize the vector store
-vector_store = Chroma(client=chroma_client, collection_name=collection_name, embedding_function=embeddings)
-
-
-def initial_setup():
-    # Preprocess the knowlegebase documents
-    csv_file_path = os.path.abspath(os.path.join("dataset_knowledgebase.csv"))
-    preprocess_documents(
-        csv_file_path=csv_file_path, 
-        chroma_client=chroma_client, 
-        collection_name=collection_name, 
-        embeddings=embeddings
+    # Set up the QA chain
+    qa = RetrievalQA.from_chain_type(
+        llm=local_llm,
+        chain_type="stuff",
+        retriever=vector_store.as_retriever(),
+        return_source_documents=True,
     )
-
-
-# Set up the QA chain
-qa = RetrievalQA.from_chain_type(
-    llm=local_llm,
-    chain_type="stuff",
-    retriever=vector_store.as_retriever(),
-    return_source_documents=True,
-)
+    return qa
