@@ -14,7 +14,6 @@ embeddings = OpenAIEmbeddings()
 OPENAI_API_KEY = os.environ['OPENAI_API_KEY']
 CHROMA_PATH = os.environ['CHROMA_PATH']
 MAX_BATCH_SIZE = int(os.environ['MAX_BATCH_SIZE'])
-RELOAD_DATA_STORE = os.getenv(os.environ['RELOAD_DATA_STORE']) and os.getenv(os.environ['RELOAD_DATA_STORE']).lower() == "true"
 
 # Initialize the LLM
 model_id=os.environ['MODEL_ID']

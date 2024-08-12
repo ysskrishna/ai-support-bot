@@ -18,6 +18,11 @@ python main.py
 pip freeze > requirements.txt
 ```
 
+## How to load knowledge base
+```
+python load_knowledgebase.py
+```
+
 ## How to run evaluate LLM
 ```
 python evaluate_llm.py

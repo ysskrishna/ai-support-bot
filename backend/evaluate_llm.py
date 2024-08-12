@@ -4,7 +4,7 @@ import sys
 current_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.abspath(os.path.join(current_dir)))
 
-from calculate_metrics import evaluate_response
+from src.utils.evaluate import evaluate_response
 from src.core.config import get_qa_chain
 
 
@@ -46,7 +46,8 @@ Compared to other B2B databases, Apollo offers over 65+ data attribute filters s
     return average(final_scores)
     
 
-qa = get_qa_chain()
-result = evaluate_chatbot(qa)
-print("Result of chatbot evaluation")
-print(result)
+if __name__ == "__main__":
+    qa = get_qa_chain()
+    result = evaluate_chatbot(qa)
+    print("Overall Score:")
+    print(result)
