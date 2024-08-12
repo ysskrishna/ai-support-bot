@@ -37,8 +37,8 @@ Compared to other B2B databases, Apollo offers over 65+ data attribute filters s
     ]
 
     final_scores = []
-    for item in test_data:
-        print(f"testing input: {item['input']}")
+    for index, item in enumerate(test_data):
+        print(f"testing input {index + 1}/{len(test_data)}: {item['input']}")
         response = chatbot(item['input'])['result']
         evaluation_result = evaluate_response(response, item['expected_output'])
         final_scores.append(evaluation_result['overall_score'])
@@ -50,4 +50,4 @@ if __name__ == "__main__":
     qa = get_qa_chain()
     result = evaluate_chatbot(qa)
     print("Overall Score:")
-    print(result)
+    print(f"{result * 100:.2f}%")
