@@ -56,13 +56,6 @@ Once the containers are running, you can access the backend application at:
 http://localhost:8081/
 ```
 
-### Chroma DB URL
-Once the containers are running, you can access the ChromaDB application at:
-```
-http://localhost:8000/
-```
-
-
 ## Pending Improvements
 - Add SQL/NoSQL DB to store the user queries and generated reponses
 
