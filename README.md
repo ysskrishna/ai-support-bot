@@ -20,7 +20,7 @@ This diagram illustrates the high level components involved and thier interactio
 <img src="./media/chatbot.png" alt="Chatbot"/>
 
 <video width="320" height="240" controls>
-  <source src="./media/chatbot_demo.mp4" type="video/mp4">
+  <source src="./media/ai_support_bot_demo.mp4" type="video/mp4">
 </video>
 
 
