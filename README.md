@@ -1,6 +1,6 @@
-# AI Support Bot
+# AI Support Bot with Custom Knowledgebase Integration
 
-A full stack basic AI powered chatbot capable of interacting with custom knowledgebases
+A full-stack chatbot application that uses RAGS to interact intelligently with users based on custom-loaded knowledgebases. It supports dynamic dataset loading for seamless updates. The chatbot’s language model is evaluated on relevance, accuracy, coherence, completeness, creativity, tone, and alignment with intent, ensuring high-quality, user-focused interactions.
 
 ## Techstack used
 - React
