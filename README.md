@@ -17,7 +17,7 @@ This diagram illustrates the high level components involved and thier interactio
 <img src="./media/flowchart.JPG" alt="Flowchart"/>
 
 ## Demo
-<img src="./media/chatbot.png" alt="Chatbot"/>
+<img src="./media/chatbot.JPG" alt="Chatbot"/>
 
 <video width="320" height="240" controls>
   <source src="./media/ai_support_bot_demo.mp4" type="video/mp4">
